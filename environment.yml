@@ -1,0 +1,10 @@
+name: gnps_postprocessing
+channels:
+  - conda-forge
+  - rdkit
+dependencies:
+  - numpy
+  - pandas
+  - molvs
+  - shlex
+  - rdkit
