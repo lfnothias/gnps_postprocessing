@@ -73,7 +73,7 @@ def get_molecular_formula_from_inchi(table_in, inchi_column, remove_C_containing
             table = table_in
         
         #Filter 
-        print('Initial number of annotations filtering: '+str(table.shape[0]))
+        print('Initial number of annotations: '+str(table.shape[0]))
         
         if remove_C_containing_in_source_fragment is True:
             table = table[~table[str(prefix)+'Adduct'].str.contains("-C|i")]
@@ -84,6 +84,5 @@ def get_molecular_formula_from_inchi(table_in, inchi_column, remove_C_containing
         
         #Just to check there was no weird InChI
         table = table[table[str(prefix)+'INCHI_MF'].str.upper().str.startswith('C', na=False)]
-        print('Valid molecular formula: '+str(table.shape[0]))
 
         return table

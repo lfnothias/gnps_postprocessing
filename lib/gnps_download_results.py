@@ -4,9 +4,11 @@ import zipfile
 import os
 import pandas as pd
 
-def gnps_download_results(job_id, output_folder, return_annotation_table=False, return_network_table=False):
+def gnps_download_results(job_id, output_folder):
     # This function download GNPS molecular networking job results locally 
-    # and detect if the job is classical or feature-based Molecular networking
+    # and detect if the job is classical or feature-based Molecular networking.
+    # It then creates instances of the network and annotation tables.
+    
     # Author: Louis-Felix Nothias 2021-2022
     
     # Demo: 
@@ -63,11 +65,6 @@ def gnps_download_results(job_id, output_folder, return_annotation_table=False, 
         df_network = pd.read_csv(output_folder+'/clusterinfosummarygroup_attributes_withIDs_withcomponentID/'+path_networkinfo, sep='\t')
         print('==================')
         print('      '+str(df_network.shape[0]-1)+' nodes in the network (including single nodes)')
-    
-        if return_annotation_table == True:
-            return df_annotations
-        elif return_network_table == True:
-            return df_network
         
     # If it is not a classical molecular networking job, we try feature-based molecular networking
     except : 
@@ -102,8 +99,5 @@ def gnps_download_results(job_id, output_folder, return_annotation_table=False, 
             print('==================')
             print('      '+str(df_network.shape[0]-1)+' nodes in the network (including single nodes).')
             
-            
-        if return_annotation_table == True:
-            return df_annotations
-        elif return_network_table == True:
-            return df_network
+        gnps_download_results.df_network = df_network
+        gnps_download_results.df_annotations = df_annotations
