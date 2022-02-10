@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-def MF_checker_on_two_MF_columns(table, column1, column2, check_column_name):
+def compare_molecular_formula(table, column1, column2, check_column_name):
         # We are matching molecular formulas only by the number of carbons as the SIRIUS adducts can be quite variable and deals strangely with adduct/ionisationin the MF. Like loss of water etc. Ammonium adduct.
     table[str(column1)+'_partial'] = table[column1].str[:3]
     table[str(column2)+'_partial'] = table[column2].str[:3]
