@@ -5,5 +5,7 @@ Some python scripts to postprocess GNPS results
 
 When used as submodule, it can be updated from an other repo with the command:
 `git submodule update --remote` 
+
 then 
+
 push changes either with gh or github desktop
