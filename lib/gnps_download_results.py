@@ -12,8 +12,8 @@ def gnps_download_results(job_id, output_folder):
     # Author: Louis-Felix Nothias 2021-2022
     
     # Demo: 
-    #gnps_annotations = gnps_downloader(job_id = 'bbee697a63b1400ea585410fafc95723', output_folder = 'gnps_results', return_annotation_table=True)
-    #gnps_annotations = gnps_downloader(job_id = '2047c735fc3546f7a3a32c78245edccf', output_folder = 'gnps_results_fbmn', return_annotation_table=True)
+    #gnps_annotations = gnps_downloader(job_id = 'bbee697a63b1400ea585410fafc95723', output_folder = 'gnps_results')
+    #gnps_annotations = gnps_downloader(job_id = '2047c735fc3546f7a3a32c78245edccf', output_folder = 'gnps_results_fbmn')
 
     # Base link to download GNPS job annotations
     gnps_download_link = "https://gnps.ucsd.edu/ProteoSAFe/DownloadResult?task="+job_id+"&view=view_all_annotations_DB"
@@ -99,5 +99,5 @@ def gnps_download_results(job_id, output_folder):
             print('==================')
             print('      '+str(df_network.shape[0]-1)+' nodes in the network (including single nodes).')
             
-        gnps_download_results.df_network = df_network
-        gnps_download_results.df_annotations = df_annotations
+    gnps_download_results.df_network = df_network
+    gnps_download_results.df_annotations = df_annotations
