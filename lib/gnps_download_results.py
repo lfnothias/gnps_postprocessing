@@ -4,7 +4,7 @@ import zipfile
 import os
 import pandas as pd
 
-def gnps_download_results(job_id, output_folder):
+def gnps_download_results(job_id, output_folder, force_redownload='yes'):
     # This function download GNPS molecular networking job results locally 
     # and detect if the job is classical or feature-based Molecular networking.
     # It then creates instances of the network and annotation tables.
@@ -17,40 +17,61 @@ def gnps_download_results(job_id, output_folder):
 
     # Base link to download GNPS job annotations
     gnps_download_link = "https://gnps.ucsd.edu/ProteoSAFe/DownloadResult?task="+job_id+"&view=view_all_annotations_DB"
-    
-    # Launch the download
-    print('==================')
-    print('This is the GNPS job link: https://gnps.ucsd.edu/ProteoSAFe/status.jsp?task='+job_id)
-    print("Downloading the following content: " + str(gnps_download_link))
-    
-    # Clearing local files
-    subprocess.call(shlex.split('rm '+output_folder+'.zip'))
-    cmd = 'curl -d "" '+gnps_download_link+' -o '+output_folder+'.zip'
-    
-    # Call the process and catch errors
-    try:
-        subprocess.call(shlex.split(cmd))
-    except subprocess.CalledProcessError as e:
-        print(e.output)
-    
-    # We are checking that the call resulted in a excepted zipfile (using size)
-    try:
-        b = os.path.getsize(output_folder+'.zip')
-        if b > 10000:
-            print('GNPS job results were succesfully downloaded as: '+output_folder+'.zip')
-        elif b < 10000:
-            print(' ==========> ERROR in the download -> check the job ID and/or job type')
-    except:
-        print(' ==========> ERROR in the download -> check the job ID and/or job type')
-   
-    # Extracting the downloaded zipfile into a folder
-    subprocess.call(shlex.split('rm -r '+output_folder))
-    with zipfile.ZipFile(str(output_folder+'.zip'),"r") as zip_ref:
-        zip_ref.extractall(output_folder)
-    if os.path.isdir(output_folder) == True:
-        print('GNPS job results were succesfully extracted into the folder: '+ str(output_folder))
+    output_zip = f"{output_folder}.zip"
+
+    # Check if the ZIP file and the extracted folder already exist
+    if os.path.exists(output_zip) and os.path.isdir(output_folder):
+        print('Using already downloaded and extracted GNPS results')
     else:
-        print(' ==========> ERROR in the download/extraction process')
+        # Remove existing ZIP file if it exists
+        if os.path.exists(output_zip):
+            try:
+                os.remove(output_zip)
+            except OSError as e:
+                print(f"Error deleting file: {output_zip}. Error: {e}")
+
+        # Download the file
+        try:
+            cmd = f'curl -d "" {gnps_download_link} -o {output_zip}'
+            subprocess.call(shlex.split(cmd))
+            print(f"Downloaded file: {output_zip}")
+        except subprocess.CalledProcessError as e:
+            print(f"Error in downloading file: {e}")
+
+        # Check if the download was successful
+        if not os.path.exists(output_zip):
+            print("==========> ERROR in the download -> check the job ID and/or job type")
+        
+        # Check the size of the downloaded file
+        try:
+            file_size = os.path.getsize(output_zip)
+            if file_size > 10000:
+                print(f'GNPS job results were successfully downloaded as: {output_zip}')
+            else:
+                print('==========> ERROR in the download -> check the job ID and/or job type')
+        except OSError as e:
+            print(f'Error checking file size: {e}')
+
+        # Extracting the downloaded zipfile into a folder
+        if os.path.exists(output_folder):
+            try:
+                subprocess.call(shlex.split(f'rm -r {output_folder}'))
+            except subprocess.CalledProcessError as e:
+                print(f"Error removing existing folder: {e}")
+
+        try:
+            with zipfile.ZipFile(output_zip, "r") as zip_ref:
+                zip_ref.extractall(output_folder)
+        except zipfile.BadZipFile:
+            print("Error: The downloaded file is not a valid ZIP file.")
+        except FileNotFoundError:
+            print(f"Error: The file {output_zip} does not exist.")
+
+        # Check if the extraction was successful
+        if os.path.isdir(output_folder):
+            print(f'GNPS job results were successfully extracted into the folder: {output_folder}')
+        else:
+            print('==========> ERROR in the extraction process')
         
     # We are gonna check if this is classical molecular networking job
     try :
