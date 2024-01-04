@@ -172,9 +172,7 @@ def mol_to_SMILES_iso(mol_list):
     print('Converting mol objects to SMILES iso')
     smiles_list = []
 
-
     for x in mol_list:
-        
         if x is not np.nan:
             try:
                 smiles_list.append(standardize_smiles(remove_salt_from_SMILES(Chem.MolToSmiles(neutralize_atoms_in_mol(mol_salt_remover(x)), isomericSmiles=False))))
@@ -311,4 +309,3 @@ def remove_salt_from_SMILES(smiles):
 
     except:
         raise
-        
