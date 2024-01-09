@@ -3,6 +3,7 @@ import shlex
 import zipfile
 import os
 import pandas as pd
+import requests
 
 def gnps_download_results(job_id, output_folder, force_redownload='yes'):
     # This function download GNPS molecular networking job results locally 
@@ -14,13 +15,13 @@ def gnps_download_results(job_id, output_folder, force_redownload='yes'):
     # Demo: 
     #gnps_annotations = gnps_downloader(job_id = 'bbee697a63b1400ea585410fafc95723', output_folder = 'gnps_results')
     #gnps_annotations = gnps_downloader(job_id = '2047c735fc3546f7a3a32c78245edccf', output_folder = 'gnps_results_fbmn')
-
+    
     # Base link to download GNPS job annotations
-    gnps_download_link = "https://gnps.ucsd.edu/ProteoSAFe/DownloadResult?task="+job_id+"&view=view_all_annotations_DB"
+    gnps_download_link = f"https://gnps.ucsd.edu/ProteoSAFe/DownloadResult?task={job_id}&view=view_all_annotations_DB"
     output_zip = f"{output_folder}.zip"
 
     # Check if the ZIP file and the extracted folder already exist
-    if os.path.exists(output_zip) and os.path.isdir(output_folder):
+    if os.path.exists(output_zip) and os.path.isdir(output_folder) and force_redownload.lower() != 'yes':
         print('Using already downloaded and extracted GNPS results')
     else:
         # Remove existing ZIP file if it exists
@@ -30,12 +31,17 @@ def gnps_download_results(job_id, output_folder, force_redownload='yes'):
             except OSError as e:
                 print(f"Error deleting file: {output_zip}. Error: {e}")
 
-        # Download the file
+        # Download the file using requests
         try:
-            cmd = f'curl -d "" {gnps_download_link} -o {output_zip}'
-            subprocess.call(shlex.split(cmd))
+            with requests.get(gnps_download_link, stream=True) as r:
+                r.raise_for_status()
+                with open(output_zip, 'wb') as f:
+                    for chunk in r.iter_content(chunk_size=8192): 
+                        f.write(chunk)
             print(f"Downloaded file: {output_zip}")
-        except subprocess.CalledProcessError as e:
+        except requests.exceptions.HTTPError as e:
+            print(f"HTTP Error occurred: {e}")
+        except Exception as e:
             print(f"Error in downloading file: {e}")
 
         # Check if the download was successful
