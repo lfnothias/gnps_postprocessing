@@ -32,18 +32,18 @@ def gnps_download_results(job_id, output_folder, force_redownload='yes'):
                 print(f"Error deleting file: {output_zip}. Error: {e}")
 
         # Download the file using requests
-        try:
-            with requests.get(gnps_download_link, stream=True) as r:
-                r.raise_for_status()
-                with open(output_zip, 'wb') as f:
-                    for chunk in r.iter_content(chunk_size=8192): 
-                        f.write(chunk)
-            print(f"Downloaded file: {output_zip}")
-        except requests.exceptions.HTTPError as e:
-            print(f"HTTP Error occurred: {e}")
-        except Exception as e:
-            print(f"Error in downloading file: {e}")
-
+    try:
+        with requests.post(gnps_download_link, data={}, stream=True) as r:  # Changed to POST request
+            r.raise_for_status()
+            with open(output_zip, 'wb') as f:
+                for chunk in r.iter_content(chunk_size=8192): 
+                    f.write(chunk)
+        print(f"Downloaded file: {output_zip}")
+    except requests.exceptions.HTTPError as e:
+        print(f"HTTP Error occurred: {e}")
+    except Exception as e:
+        print(f"Error in downloading file: {e}")
+    
         # Check if the download was successful
         if not os.path.exists(output_zip):
             print("==========> ERROR in the download -> check the job ID and/or job type")
