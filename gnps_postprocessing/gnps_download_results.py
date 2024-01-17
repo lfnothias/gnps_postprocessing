@@ -59,28 +59,30 @@ def gnps_download_results(job_id, output_folder, force_redownload='yes'):
     except OSError as e:
         print(f'Error checking file size: {e}')
 
-    # Extracting the downloaded zipfile into a folder
+    #removing the folder if already exists
     if os.path.exists(output_folder):
         try:
             shutil.rmtree(output_folder)
         except Exception as e:
             print(f"Error removing existing folder: {e}")
     else:
-        # Attempt to unzip the file
-        try:
-            with zipfile.ZipFile(output_zip, "r") as zip_ref:
-                zip_ref.extractall(output_folder)
-        except zipfile.BadZipFile:
-            print("Error: The downloaded file is not a valid ZIP file.")
-        except FileNotFoundError:
-            print(f"Error: The file {output_zip} does not exist.")
-        except Exception as e:
-            print(f"Unexpected error during extraction: {e}")
-        # Check if files were successfully extracted
-        if any(os.scandir(output_folder)):
-            print(f'Files were successfully extracted into the folder: {output_folder}')
-        else:
-            print('==========> ERROR in the extraction process')
+        pass
+
+    # Extracting the downloaded zipfile into a folder
+    try:
+        with zipfile.ZipFile(output_zip, "r") as zip_ref:
+            zip_ref.extractall(output_folder)
+    except zipfile.BadZipFile:
+        print("Error: The downloaded file is not a valid ZIP file.")
+    except FileNotFoundError:
+        print(f"Error: The file {output_zip} does not exist.")
+    except Exception as e:
+        print(f"Unexpected error during extraction: {e}")
+    # Check if files were successfully extracted
+    if any(os.scandir(output_folder)):
+        print(f'Files were successfully extracted into the folder: {output_folder}')
+    else:
+        print('==========> ERROR in the extraction process')
         
     # We are gonna check if this is classical molecular networking job
     try :
