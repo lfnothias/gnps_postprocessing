@@ -91,47 +91,45 @@ def gnps_download_results(job_id, output_folder, force_redownload='yes'):
     try :
         path = [x for x in os.listdir(output_folder+'/result_specnets_DB')][0]
         df_annotations  = pd.read_csv(output_folder+'/result_specnets_DB/'+path, sep='\t')
-        print('==================')
+        #print('==================')
         print('   CLASSICAL MOLECULAR NETWORKING job detected')
-        print('==================')
-        print('      '+str(df_annotations.shape[0]-1)+' spectral library annotations in the job.')
+        #print('==================')
+        print(' > '+str(df_annotations.shape[0]-1)+' spectral library annotations in the job.')
 
         path_networkinfo = [x for x in os.listdir(output_folder+'/clusterinfosummarygroup_attributes_withIDs_withcomponentID')][0]
         df_network = pd.read_csv(output_folder+'/clusterinfosummarygroup_attributes_withIDs_withcomponentID/'+path_networkinfo, sep='\t')
-        print('==================')
-        print('      '+str(df_network.shape[0]-1)+' nodes in the network (including single nodes)')
+        #print('==================')
+        print(' > '+str(df_network.shape[0]-1)+' nodes in the network (including single nodes)')
         
     # If it is not a classical molecular networking job, we try feature-based molecular networking
     except : 
     
         # We try for more recent version of the FBMN workflow
         try: 
-            print('==================')
             path = [x for x in os.listdir(output_folder+'/DB_result')][0]
             df_annotations = pd.read_csv(output_folder+'/DB_result/'+path, sep='\t')
-            print('==================')
+            #print('==================')
             print('   FEATURE-BASED MOLECULAR NETWORKING job detected - Version > 28')
-            print('==================')
-            print('      '+str(df_annotations.shape[0]-1)+' spectral library annotations in the job.')
+            #print('==================')
+            print(' > '+str(df_annotations.shape[0]-1)+' spectral library annotations in the job.')
 
             path_networkinfo = [x for x in os.listdir(output_folder+'/clusterinfo_summary')][0]
             df_network = pd.read_csv(output_folder+'/clusterinfo_summary/'+path_networkinfo, sep='\t')
-            print('==================')
-            print('      '+str(df_network.shape[0]-1)+' nodes in the network (including single nodes).')
+            #print('==================')
+            print(' > '+str(df_network.shape[0]-1)+' nodes in the network (including single nodes).')
         
         # We fall back to older version of the FBMN workflow
         except:
-            print('==================')
             path = [x for x in os.listdir(output_folder+'/DB_result')][0]
             df_annotations = pd.read_csv(output_folder+'/DB_result/'+path, sep='\t')
-            print('==================')
+            #print('==================')
             print('   FEATURE-BASED MOLECULAR NETWORKING job detected - Version < 28')
-            print('==================')
+            #print('==================')
             #print('      '+str(df_annotations.shape[0]-1)+' spectral library annotations in the job.')
 
             path_networkinfo = [x for x in os.listdir(output_folder+'/clusterinfosummarygroup_attributes_withIDs_withcomponentID')][0]
             df_network = pd.read_csv(output_folder+'/clusterinfosummarygroup_attributes_withIDs_withcomponentID/'+path_networkinfo, sep='\t')
-            print('==================')
+            #print('==================')
             #print('      '+str(df_network.shape[0]-1)+' nodes in the network (including single nodes).')
             
     gnps_download_results.df_network = df_network

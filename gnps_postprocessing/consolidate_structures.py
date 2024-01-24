@@ -1,5 +1,6 @@
 # This function consolidate the list of structure from pandas table such as GNPS
-# Author: Louis-Felix Nothias 2021
+# Author: Louis-Felix Nothias 2021; Revised by Lucas Pradi 2023
+# For a more comprehensive printout, please remove the comment signs (#) in front of the print lines
 
 import pandas as pd
 import numpy as np
@@ -28,7 +29,7 @@ def consolidate_and_convert_structures(df, prefix='', smiles='Smiles', inchi=0):
         df[smiles] = df[smiles].astype('str')
         df[smiles] = df[smiles].map(lambda x:x.lstrip('"').rstrip('"'))
                                                                   
-        print('Only SMILES were inputted')
+        #print(' > Only SMILES were inputted')
         try: 
             make_mol_from_SMILES(df[smiles])
             mol_to_SMILES_iso(make_mol_from_SMILES.mol_list)
@@ -39,7 +40,7 @@ def consolidate_and_convert_structures(df, prefix='', smiles='Smiles', inchi=0):
         except:
             raise
     else:
-        print('Both SMILES and InChI were inputted')
+        #print(' > Both SMILES and InChI were inputted')
         df[smiles] = df[smiles].astype('str')
         df[inchi] = df[inchi].astype('str')
         df[smiles] = df[smiles].map(lambda x:x.lstrip('"').rstrip('"'))
@@ -71,13 +72,13 @@ def consolidate_and_convert_structures(df, prefix='', smiles='Smiles', inchi=0):
     mol_to_SMILES.smiles_list = []
     mol_to_SMILES_iso.smiles_list = []
 
-    print('End')
+    #print('End')
     return df
 
 
 def make_mol_from_SMILES(list_smiles):
 	#Make a list of mol from SMILES list
-    print('Converting SMILES to mol object')
+    #print('Converting SMILES to mol object')
     mol_list = []
     counter_success = 0
     counter_except = 0
@@ -102,14 +103,14 @@ def make_mol_from_SMILES(list_smiles):
             
     make_mol_from_SMILES.mol_list = mol_list
     mol_list = []
-    print('Succesfully converted to mol object: '+str(counter_success))
-    print('Exception to the parsing: '+str(counter_except))
-    print('Not available: '+str(counter_not_available))
+    #print('Succesfully converted to mol object: '+str(counter_success))
+    #print('Exception to the parsing: '+str(counter_except))
+    #print('Not available: '+str(counter_not_available))
 
 
 def make_mol_from_INCHI(list_inchi):
 	#Make a list of mol from InChI list
-    print('Converting INCHI to mol object')
+    #print('Converting INCHI to mol object')
     mol_list = []
     counter_success = 0
     counter_except = 0
@@ -134,14 +135,14 @@ def make_mol_from_INCHI(list_inchi):
             
     make_mol_from_INCHI.mol_list = mol_list
     mol_list = []
-    print('Succesfully converted to mol object: '+str(counter_success))
-    print('Exception to the parsing: '+str(counter_except))
-    print('Not available: '+str(counter_not_available))
+    #print('Succesfully converted to mol object: '+str(counter_success))
+    #print('Exception to the parsing: '+str(counter_except))
+    #print('Not available: '+str(counter_not_available))
     
 
 def merge_mol(mol_list,mol_list2):
 	#Consolidated a mol list from two lists of mols
-    print('Consolidating the lists')
+    #print('Consolidating the lists')
     consensus_mol_list = []
     counter_1 = 0
     counter_2 = 0
@@ -161,15 +162,15 @@ def merge_mol(mol_list,mol_list2):
 
     merge_mol.consensus_mol_list = consensus_mol_list
     consensus_mol_list = []
-    print('Total mol object from the list 1 = '+str(counter_1))
-    print('Mol object consolidated from list 2 = '+str(counter_2))
-    print('Consolidated structures = '+str(counter_1+counter_2))
+    #print('Total mol object from the list 1 = '+str(counter_1))
+    #print('Mol object consolidated from list 2 = '+str(counter_2))
+    #print('Consolidated structures = '+str(counter_1+counter_2))
 
 
 def mol_to_SMILES_iso(mol_list):
 	#Take a list of mol objects and convert to canonical SMILES
 	
-    print('Converting mol objects to SMILES iso')
+    #print('Converting mol objects to SMILES iso')
     smiles_list = []
 
 
@@ -191,7 +192,7 @@ def mol_to_SMILES_iso(mol_list):
 
 def mol_to_SMILES(mol_list):
 	#Take a list of mol objects and convert to SMILES with stereoconfiguration
-    print('Converting mol objects to SMILES')
+    #print('Converting mol objects to SMILES')
     smiles_list = []
 
     for x in mol_list:
@@ -211,7 +212,7 @@ def mol_to_SMILES(mol_list):
 def mol_to_INCHIKEY(mol_list):
 	#Take a list of mol objects and convert to INCHIKEY
 
-    print('Converting mol objects to InChIKey')
+    #print('Converting mol objects to InChIKey')
     inchikey_list = []
     for x in mol_list:
         if x is not np.nan:
@@ -232,7 +233,7 @@ def mol_to_INCHIKEY(mol_list):
 
 def mol_to_INCHI(mol_list):
 	#Take a list of mol objects and convert to INCHI
-    print('Converting mol objects to InChI')
+    #print('Converting mol objects to InChI')
     inchi_list = []
     for x in mol_list:
         if x is not np.nan:
