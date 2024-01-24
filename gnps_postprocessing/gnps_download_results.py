@@ -1,3 +1,8 @@
+# This function consolidate the list of structure from pandas table such as GNPS
+# Author: Louis-Felix Nothias 2021; Revised by Lucas Pradi 2023
+# For a more comprehensive printout, please remove the comment signs (#) in front of the print lines
+
+
 import subprocess
 import shlex
 import zipfile
@@ -10,8 +15,6 @@ def gnps_download_results(job_id, output_folder, force_redownload='yes'):
     # This function download GNPS molecular networking job results locally 
     # and detect if the job is classical or feature-based Molecular networking.
     # It then creates instances of the network and annotation tables.
-    
-    # Author: Louis-Felix Nothias 2021-2022
     
     # Demo: 
     #gnps_annotations = gnps_downloader(job_id = 'bbee697a63b1400ea585410fafc95723', output_folder = 'gnps_results')

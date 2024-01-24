@@ -1,3 +1,6 @@
+# This function consolidate the list of structure from pandas table such as GNPS
+# Author: Louis-Felix Nothias 2021; Revised by Lucas Pradi 2023
+# For a more comprehensive printout, please remove the comment signs (#) in front of the print lines
 
 import pandas as pd
 import numpy as np
