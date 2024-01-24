@@ -23,7 +23,8 @@ def gnps_download_results(job_id, output_folder, force_redownload='yes'):
 
     # Check if the ZIP file and the extracted folder already exist
     if os.path.exists(output_zip) and os.path.isdir(output_folder) and force_redownload.lower() != 'yes':
-        print('Using already downloaded and extracted GNPS results')
+        #print('Using already downloaded and extracted GNPS results')
+        pass
     else:
         # Remove existing ZIP file if it exists
         if os.path.exists(output_zip):
@@ -39,7 +40,7 @@ def gnps_download_results(job_id, output_folder, force_redownload='yes'):
             with open(output_zip, 'wb') as f:
                 for chunk in r.iter_content(chunk_size=8192): 
                     f.write(chunk)
-        print(f"Downloaded file: {output_zip}")
+        #print(f"Downloaded file: {output_zip}")
     except requests.exceptions.HTTPError as e:
         print(f"HTTP Error occurred: {e}")
     except Exception as e:
@@ -53,7 +54,8 @@ def gnps_download_results(job_id, output_folder, force_redownload='yes'):
     try:
         file_size = os.path.getsize(output_zip)
         if file_size > 10000:
-            print(f'GNPS job results were successfully downloaded as: {output_zip}')
+            #print(f'GNPS job results were successfully downloaded as: {output_zip}')
+            pass
         else:
             print('==========> ERROR in the download -> check the job ID and/or job type')
     except OSError as e:
@@ -80,7 +82,8 @@ def gnps_download_results(job_id, output_folder, force_redownload='yes'):
         print(f"Unexpected error during extraction: {e}")
     # Check if files were successfully extracted
     if any(os.scandir(output_folder)):
-        print(f'Files were successfully extracted into the folder: {output_folder}')
+        #print(f'Files were successfully extracted into the folder: {output_folder}')
+        pass
     else:
         print('==========> ERROR in the extraction process')
         
@@ -124,12 +127,12 @@ def gnps_download_results(job_id, output_folder, force_redownload='yes'):
             print('==================')
             print('   FEATURE-BASED MOLECULAR NETWORKING job detected - Version < 28')
             print('==================')
-            print('      '+str(df_annotations.shape[0]-1)+' spectral library annotations in the job.')
+            #print('      '+str(df_annotations.shape[0]-1)+' spectral library annotations in the job.')
 
             path_networkinfo = [x for x in os.listdir(output_folder+'/clusterinfosummarygroup_attributes_withIDs_withcomponentID')][0]
             df_network = pd.read_csv(output_folder+'/clusterinfosummarygroup_attributes_withIDs_withcomponentID/'+path_networkinfo, sep='\t')
             print('==================')
-            print('      '+str(df_network.shape[0]-1)+' nodes in the network (including single nodes).')
+            #print('      '+str(df_network.shape[0]-1)+' nodes in the network (including single nodes).')
             
     gnps_download_results.df_network = df_network
     gnps_download_results.df_annotations = df_annotations
