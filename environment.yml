@@ -7,3 +7,4 @@ dependencies:
   - pandas
   - molvs
   - rdkit::rdkit
+  - requests
